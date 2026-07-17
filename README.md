@@ -35,7 +35,9 @@ A real-time person detection and alert system built with Python, YOLOv8, and Ope
 
 | Detector HUD : <img width="1578" height="873" alt="Screenshot 2026-07-17 173736" src="https://github.com/user-attachments/assets/9f6ff8bb-28c6-439b-b1bf-6fcdbbaf8a62" />
 
-| Splash Screen : <img width="626" height="744" alt="Screenshot 2026-07-17 173751" src="https://github.com/user-attachments/assets/59a33462-47a2-4457-aebf-b4b91057e2fa" />
+| Splash Screen :
+
+<img width="626" height="744" alt="Screenshot 2026-07-17 173751" src="https://github.com/user-attachments/assets/59a33462-47a2-4457-aebf-b4b91057e2fa" />
 
 ---
 

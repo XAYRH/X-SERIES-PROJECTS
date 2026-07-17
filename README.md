@@ -8,7 +8,7 @@ A real-time person detection and alert system built with Python, YOLOv8, and Ope
 
 ---
 
-## ✨ Features
+##  Features
 
 - **Real-time person detection** using YOLOv8, accurate in any pose (standing, walking, waving, sitting)
 - **Professional HUD interface** — live stats sidebar, targeting-bracket reticles, session uptime, FPS counter, live snapshot preview
@@ -37,7 +37,7 @@ A real-time person detection and alert system built with Python, YOLOv8, and Ope
 
 ---
 
-## 🧰 Tech Stack
+##  Tech Stack
 
 - **Python 3.14**
 - **YOLOv8** (via `ultralytics`) — real-time object/person detection

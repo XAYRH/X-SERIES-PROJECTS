@@ -4,6 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ROOMGUARD-X — Detection is the First Line of Defense</title>
+<meta name="google-site-verification" content="Emj1mwIARPJQ0HdaefngpEYLQTt5JQiYSOJ4wx12hk8" />
+<meta name="description" content="RoomGuard-X is a real-time person detection and alert system built with Python, YOLOv8, and OpenCV. Get instant Windows and Discord notifications the moment someone enters your room.">
+<meta name="keywords" content="RoomGuard-X, person detection, YOLOv8, OpenCV, security camera software, real-time detection, Python computer vision, room monitoring app">
+<meta name="author" content="Mr Reix">
+
+<!-- Open Graph / social preview (Discord, Twitter, Facebook, etc.) -->
+<meta property="og:title" content="ROOMGUARD-X — Detection is the First Line of Defense">
+<meta property="og:description" content="A real-time person detection and alert system built with Python, YOLOv8, and OpenCV.">
+<meta property="og:image" content="https://xayrh.github.io/X-SERIES-PROJECTS/roomguardx_logo.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://xayrh.github.io/X-SERIES-PROJECTS/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ROOMGUARD-X — Detection is the First Line of Defense">
+<meta name="twitter:description" content="A real-time person detection and alert system built with Python, YOLOv8, and OpenCV.">
+<meta name="twitter:image" content="https://xayrh.github.io/X-SERIES-PROJECTS/roomguardx_logo.png">
+
+<link rel="icon" type="image/png" href="roomguardx_logo.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -240,6 +258,7 @@
     </div>
     <div class="nav-links">
       <a href="#features">Features</a>
+      <a href="#install">Install</a>
       <a href="#stack">Stack</a>
       <a href="#alerts">Alerts</a>
     </div>
@@ -257,7 +276,7 @@
     <p class="hero-sub">A real-time presence detection system that watches your room, recognizes when someone enters, and alerts you instantly — on your desktop and your phone.</p>
     <p class="hero-tagline">// "DETECTION IS THE FIRST LINE OF DEFENSE."</p>
     <div class="hero-actions">
-      <a class="btn-primary" href="#cta">DOWNLOAD LATEST BUILD</a>
+      <a class="btn-primary" href="https://github.com/XAYRH/X-SERIES-PROJECTS/releases/tag/v1.0" target="_blank">DOWNLOAD LATEST BUILD</a>
       <a class="btn-secondary" href="#features">VIEW CAPABILITIES</a>
     </div>
 
@@ -384,13 +403,58 @@
     </div>
   </section>
 
+  <!-- INSTALL -->
+  <section id="install">
+    <div class="section-label">// 04 — INSTALLATION</div>
+    <h2 class="section-title display">Up and running in under five minutes.</h2>
+    <p class="section-desc">No installer wizard, no account, no cloud setup. Download, unzip, run.</p>
+
+    <div class="feature-grid" style="grid-template-columns:1fr;">
+      <div class="feature-card" style="display:flex; gap:24px; align-items:flex-start;">
+        <div class="feature-index mono" style="flex-shrink:0;">01</div>
+        <div>
+          <h3>Download the build</h3>
+          <p>Go to the <a href="https://github.com/XAYRH/X-SERIES-PROJECTS/releases/tag/v1.0" target="_blank" style="color:var(--white);">v1.0 release page</a> on GitHub and download <span class="mono" style="color:var(--white);">ROOMGUARD-X.zip</span>.</p>
+        </div>
+      </div>
+      <div class="feature-card" style="display:flex; gap:24px; align-items:flex-start;">
+        <div class="feature-index mono" style="flex-shrink:0;">02</div>
+        <div>
+          <h3>Unzip it</h3>
+          <p>Extract the folder anywhere on your PC — Desktop, Documents, wherever. Keep <span class="mono" style="color:var(--white);">ROOMGUARD-X.exe</span> and the <span class="mono" style="color:var(--white);">_internal</span> folder together in the same place.</p>
+        </div>
+      </div>
+      <div class="feature-card" style="display:flex; gap:24px; align-items:flex-start;">
+        <div class="feature-index mono" style="flex-shrink:0;">03</div>
+        <div>
+          <h3>Run it</h3>
+          <p>Double-click <span class="mono" style="color:var(--white);">ROOMGUARD-X.exe</span>. If Windows SmartScreen shows a warning, click "More info" → "Run anyway" — this is expected for unsigned personal builds.</p>
+        </div>
+      </div>
+      <div class="feature-card" style="display:flex; gap:24px; align-items:flex-start;">
+        <div class="feature-index mono" style="flex-shrink:0;">04</div>
+        <div>
+          <h3>Connect your alerts (optional)</h3>
+          <p>To get push notifications on your phone, set up a free <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank" style="color:var(--white);">Discord webhook</a> and paste the URL into the app's settings.</p>
+        </div>
+      </div>
+      <div class="feature-card" style="display:flex; gap:24px; align-items:flex-start;">
+        <div class="feature-index mono" style="flex-shrink:0;">05</div>
+        <div>
+          <h3>Click Start</h3>
+          <p>That's it. RoomGuard-X is watching. Press <span class="mono" style="color:var(--white);">Q</span> anytime to stop, or minimize to the system tray to keep it running in the background.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section id="cta" class="cta-section" style="border-top:none;">
     <div class="section-label" style="justify-content:center; display:flex;">// READY WHEN YOU ARE</div>
     <h2 class="display">Deploy it on your own machine.</h2>
     <p>Clone the repo, drop in your Discord webhook, and RoomGuard-X is watching within minutes.</p>
     <div class="hero-actions" style="justify-content:center;">
-      <a class="btn-primary" href="https://github.com/YOUR-USERNAME/RoomGuard-X" target="_blank">VIEW ON GITHUB →</a>
+      <a class="btn-primary" href="https://github.com/XAYRH/X-SERIES-PROJECTS" target="_blank">VIEW ON GITHUB →</a>
     </div>
   </section>
 
@@ -398,7 +462,7 @@
 
 <footer>
   <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; max-width:1100px;">
-    <span>ROOMGUARD-X — X SERIES / PROJECT 1</span>
+    <span>ROOMGUARD-X — X SERIES | PROJECT 1</span>
     <span>MADE BY MR REIX</span>
   </div>
 </footer>

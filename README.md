@@ -29,11 +29,9 @@ A real-time person detection and alert system built with Python, YOLOv8, and Ope
 
 ## 🖥️ Screenshots
 
-> _Add your own screenshots here — drag and drop into this section on GitHub._
-
-| Launcher | Detector HUD | Splash Screen |
-|---|---|---|
-| _screenshot_ | _screenshot_ | _screenshot_ |
+| Launcher : <img width="484" height="484" alt="Screenshot 2026-07-17 173624" src="https://github.com/user-attachments/assets/6a7ef582-453c-44a9-824d-9f5558ea7bf5" />
+| Detector HUD : <img width="1578" height="873" alt="Screenshot 2026-07-17 173736" src="https://github.com/user-attachments/assets/9f6ff8bb-28c6-439b-b1bf-6fcdbbaf8a62" />
+| Splash Screen : <img width="626" height="744" alt="Screenshot 2026-07-17 173751" src="https://github.com/user-attachments/assets/59a33462-47a2-4457-aebf-b4b91057e2fa" />
 
 ---
 
@@ -105,12 +103,6 @@ Your app will be in `dist/ROOMGUARD-X/`. Keep the `.exe` and the `_internal` fol
 
 ---
 
-## 🗺️ Roadmap
-
-- [ ] ESP32 integration for physical PC lock/unlock control
-- [ ] Companion mobile app for live stream viewing
-- [ ] Facial recognition to distinguish known vs. unknown persons
-- [ ] Cloud snapshot backup
 
 ---
 

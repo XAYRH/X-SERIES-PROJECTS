@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROOMGUARD-X — Detection is the First Line of Defense</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#0a0a0b;
+    --bg-panel:#111113;
+    --bg-panel-2:#161618;
+    --line:#2a2a2d;
+    --line-soft:#1d1d20;
+    --white:#f2f2f0;
+    --grey:#8c8c92;
+    --grey-dim:#55555c;
+    --alert:#ff3b30;
+    --ok:#3ddc6f;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+  }
+  .display{font-family:'Rajdhani', sans-serif; font-weight:700; letter-spacing:0.02em;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  /* subtle grid background */
+  .grid-bg{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 90%);
+  }
+
+  .wrap{max-width:1100px; margin:0 auto; padding:0 32px; position:relative; z-index:1;}
+
+  /* ---- NAV ---- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(10,10,11,0.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px; max-width:1100px;}
+  .nav-logo{display:flex; align-items:center; gap:10px;}
+  .nav-logo-mark{width:28px; height:28px; object-fit:cover; border-radius:4px;}
+  .nav-logo-text{font-family:'Rajdhani'; font-weight:700; font-size:18px; letter-spacing:0.03em;}
+  .nav-links{display:flex; gap:32px; font-size:13px; color:var(--grey);}
+  .nav-links a{color:var(--grey); text-decoration:none; transition:color .2s;}
+  .nav-links a:hover{color:var(--white);}
+  .nav-cta{
+    border:1px solid var(--line); padding:8px 16px; font-size:12px; letter-spacing:0.05em;
+    color:var(--white); text-decoration:none; font-family:'JetBrains Mono'; transition:all .2s;
+  }
+  .nav-cta:hover{background:var(--white); color:var(--bg);}
+
+  /* ---- HERO ---- */
+  .hero{padding:170px 0 90px; position:relative;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono'; font-size:11px; letter-spacing:0.15em; color:var(--grey);
+    border:1px solid var(--line); padding:6px 12px; margin-bottom:28px;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--ok); animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+
+  .hero h1{
+    font-size:clamp(48px, 8vw, 92px);
+    line-height:0.95;
+    letter-spacing:0.01em;
+    margin-bottom:24px;
+  }
+  .hero-logo{
+    width:96px; height:96px; object-fit:cover; border-radius:12px;
+    margin-bottom:24px; display:block;
+    box-shadow:0 0 40px rgba(255,255,255,0.06);
+  }
+  .hero h1 .x{color:var(--white); position:relative;}
+  .hero-sub{
+    font-size:17px; color:var(--grey); max-width:520px; line-height:1.6; margin-bottom:40px;
+  }
+  .hero-tagline{
+    font-family:'JetBrains Mono'; font-size:13px; color:var(--grey-dim);
+    letter-spacing:0.05em; margin-bottom:44px;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--white); color:var(--bg); padding:14px 28px;
+    font-family:'JetBrains Mono'; font-size:13px; letter-spacing:0.05em; font-weight:600;
+    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-secondary{
+    border:1px solid var(--line); color:var(--white); padding:14px 28px;
+    font-family:'JetBrains Mono'; font-size:13px; letter-spacing:0.05em;
+    text-decoration:none; transition:all .2s;
+  }
+  .btn-secondary:hover{border-color:var(--white);}
+
+  /* ---- LIVE HUD MOCKUP (signature element) ---- */
+  .hud-mock{
+    margin-top:90px;
+    border:1px solid var(--line);
+    background:var(--bg-panel);
+    position:relative;
+    overflow:hidden;
+  }
+  .hud-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 20px; border-bottom:1px solid var(--line);
+    background:var(--bg-panel-2);
+  }
+  .hud-header-left{display:flex; align-items:center; gap:10px;}
+  .hud-title{font-family:'Rajdhani'; font-weight:700; font-size:16px; letter-spacing:0.02em;}
+  .hud-status{
+    display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono'; font-size:11px;
+    letter-spacing:0.08em; color:var(--ok);
+  }
+  .hud-status .dot{width:6px; height:6px; border-radius:50%; background:var(--ok); animation:pulse 1.4s infinite;}
+
+  .hud-body{display:grid; grid-template-columns:1fr 220px; min-height:280px;}
+  .hud-feed{
+    position:relative; background:
+      repeating-linear-gradient(0deg, #0d0d0f, #0d0d0f 2px, #0a0a0c 2px, #0a0a0c 4px);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .hud-feed::before{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.02) 50%, transparent 100%);
+  }
+  .scanline{
+    position:absolute; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation:scan 3.5s linear infinite;
+  }
+  @keyframes scan{0%{top:0%;} 100%{top:100%;}}
+  .target-box{
+    width:120px; height:160px; position:relative;
+    animation:float 4s ease-in-out infinite;
+  }
+  @keyframes float{0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);}}
+  .target-box .corner{position:absolute; width:16px; height:16px; border:2px solid var(--white);}
+  .target-box .tl{top:0; left:0; border-right:none; border-bottom:none;}
+  .target-box .tr{top:0; right:0; border-left:none; border-bottom:none;}
+  .target-box .bl{bottom:0; left:0; border-right:none; border-top:none;}
+  .target-box .br{bottom:0; right:0; border-left:none; border-top:none;}
+  .target-label{
+    position:absolute; top:-22px; left:50%; transform:translateX(-50%);
+    font-family:'JetBrains Mono'; font-size:9px; color:var(--white); white-space:nowrap; letter-spacing:0.05em;
+  }
+
+  .hud-sidebar{border-left:1px solid var(--line); padding:18px; display:flex; flex-direction:column; gap:16px;}
+  .hud-stat{display:flex; flex-direction:column; gap:4px;}
+  .hud-stat-label{font-family:'JetBrains Mono'; font-size:9px; color:var(--grey-dim); letter-spacing:0.1em;}
+  .hud-stat-value{font-family:'JetBrains Mono'; font-size:18px; font-weight:600; color:var(--white);}
+  .hud-stat-value.accent{color:var(--ok);}
+  .hud-divider{height:1px; background:var(--line-soft);}
+
+  .hud-footer{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 20px; border-top:1px solid var(--line); background:var(--bg-panel-2);
+    font-family:'JetBrains Mono'; font-size:10px; color:var(--grey-dim); letter-spacing:0.05em;
+  }
+
+  /* ---- SECTIONS ---- */
+  section{padding:100px 0; border-top:1px solid var(--line-soft); position:relative;}
+  .section-label{
+    font-family:'JetBrains Mono'; font-size:11px; color:var(--grey-dim); letter-spacing:0.15em;
+    margin-bottom:14px;
+  }
+  .section-title{font-size:clamp(28px,4vw,42px); margin-bottom:16px; max-width:600px;}
+  .section-desc{color:var(--grey); font-size:15px; max-width:520px; line-height:1.7; margin-bottom:56px;}
+
+  /* feature terminal cards */
+  .feature-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft);}
+  .feature-card{background:var(--bg); padding:32px 26px;}
+  .feature-index{font-family:'JetBrains Mono'; font-size:11px; color:var(--grey-dim); margin-bottom:20px;}
+  .feature-card h3{font-family:'Rajdhani'; font-weight:700; font-size:19px; margin-bottom:10px; letter-spacing:0.01em;}
+  .feature-card p{color:var(--grey); font-size:13.5px; line-height:1.6;}
+
+  /* stack strip */
+  .stack-strip{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;
+  }
+  .stack-pill{
+    font-family:'JetBrains Mono'; font-size:12px; color:var(--grey);
+    border:1px solid var(--line); padding:8px 14px;
+  }
+
+  /* alert log mockup */
+  .log-block{
+    border:1px solid var(--line); background:var(--bg-panel);
+    font-family:'JetBrains Mono'; font-size:12.5px; padding:24px;
+    max-width:640px;
+  }
+  .log-line{display:flex; gap:14px; padding:6px 0; color:var(--grey);}
+  .log-line .t{color:var(--grey-dim); flex-shrink:0;}
+  .log-line .tag{color:var(--white);}
+  .log-line.alert .tag{color:var(--alert);}
+
+  /* CTA footer */
+  .cta-section{text-align:center; padding:140px 0 100px;}
+  .cta-section h2{font-size:clamp(32px,5vw,56px); margin-bottom:20px;}
+  .cta-section p{color:var(--grey); margin-bottom:40px;}
+
+  footer{
+    border-top:1px solid var(--line-soft); padding:32px 0;
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:'JetBrains Mono'; font-size:11px; color:var(--grey-dim); letter-spacing:0.05em;
+  }
+
+  @media (max-width:820px){
+    .nav-links{display:none;}
+    .hud-body{grid-template-columns:1fr;}
+    .hud-sidebar{border-left:none; border-top:1px solid var(--line); flex-direction:row; flex-wrap:wrap;}
+    .hud-sidebar .hud-divider{display:none;}
+    .feature-grid{grid-template-columns:1fr;}
+    footer{flex-direction:column; gap:10px; text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-logo">
+      <img src="roomguardx_logo.png" alt="RoomGuard-X logo" class="nav-logo-mark">
+      <div class="nav-logo-text">ROOMGUARD-X</div>
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#stack">Stack</a>
+      <a href="#alerts">Alerts</a>
+    </div>
+    <a class="nav-cta" href="#cta">GET STARTED →</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none; padding-top:170px;">
+    <div class="eyebrow"><span class="dot"></span> X SERIES — PROJECT 1 — SYSTEM ONLINE</div>
+    <img src="roomguardx_logo.png" alt="RoomGuard-X" class="hero-logo">
+    <h1 class="display">ROOMGUARD<span class="x">-X</span></h1>
+    <p class="hero-sub">A real-time presence detection system that watches your room, recognizes when someone enters, and alerts you instantly — on your desktop and your phone.</p>
+    <p class="hero-tagline">// "DETECTION IS THE FIRST LINE OF DEFENSE."</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#cta">DOWNLOAD LATEST BUILD</a>
+      <a class="btn-secondary" href="#features">VIEW CAPABILITIES</a>
+    </div>
+
+    <!-- SIGNATURE: live HUD mockup -->
+    <div class="hud-mock">
+      <div class="hud-header">
+        <div class="hud-header-left">
+          <div class="hud-title">ROOMGUARD-X — DETECTOR</div>
+        </div>
+        <div class="hud-status"><span class="dot"></span>MONITORING</div>
+      </div>
+      <div class="hud-body">
+        <div class="hud-feed">
+          <div class="scanline"></div>
+          <div class="target-box">
+            <div class="target-label">PERSON 94%</div>
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+          </div>
+        </div>
+        <div class="hud-sidebar">
+          <div class="hud-stat">
+            <div class="hud-stat-label">STATUS</div>
+            <div class="hud-stat-value accent">MONITORING</div>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <div class="hud-stat-label">PERSONS IN VIEW</div>
+            <div class="hud-stat-value">1</div>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <div class="hud-stat-label">SESSION UPTIME</div>
+            <div class="hud-stat-value" id="uptime">0:00:00</div>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <div class="hud-stat-label">FPS</div>
+            <div class="hud-stat-value" id="fps">27.4</div>
+          </div>
+        </div>
+      </div>
+      <div class="hud-footer">
+        <span id="clock">FRIDAY, JULY 17 2026 — 09:41:02 AM</span>
+        <span>DETECTION IS THE FIRST LINE OF DEFENSE.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-label">// 01 — CAPABILITIES</div>
+    <h2 class="section-title display">Built like software that watches back.</h2>
+    <p class="section-desc">Every module runs locally, in real time, with zero cloud dependency for the detection itself. Alerts route out to wherever you actually check your phone.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-index mono">001</div>
+        <h3>Real-time YOLOv8 detection</h3>
+        <p>Identifies a person in any pose — standing, walking, waving — not just on motion. Runs entirely on your own machine.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">002</div>
+        <h3>Targeting-bracket HUD</h3>
+        <p>A live interface with session stats, FPS, uptime, and a snapshot panel — styled like an actual detection console, not a webcam popup.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">003</div>
+        <h3>Dual-channel alerts</h3>
+        <p>Native Windows toast notifications and Discord push alerts with the captured photo attached, the moment someone enters frame.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">004</div>
+        <h3>Continuous recording</h3>
+        <p>Snapshots save automatically the entire time a person is visible — a running photographic log, not a single blurry frame.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">005</div>
+        <h3>Tray-native background mode</h3>
+        <p>Runs invisibly with a custom system tray icon. Start, stop, and monitor status without a window ever open.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">006</div>
+        <h3>Dark / light, windowed / full</h3>
+        <p>Toggle theme and display mode on the fly — built to sit comfortably on a desk or run fullscreen on a spare monitor.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALERTS LOG -->
+  <section id="alerts">
+    <div class="section-label">// 02 — LIVE ALERT LOG</div>
+    <h2 class="section-title display">Every detection, timestamped.</h2>
+    <p class="section-desc">A running record of who's been seen, and when — logged locally, pushed to your phone in real time.</p>
+
+    <div class="log-block">
+      <div class="log-line"><span class="t">[09:41:02]</span><span>SYSTEM ONLINE — RoomGuard-X is now watching your room.</span></div>
+      <div class="log-line alert"><span class="t">[09:42:17]</span><span><span class="tag">[ALERT]</span> 1 person detected — snapshot saved.</span></div>
+      <div class="log-line"><span class="t">[09:42:17]</span><span><span class="tag">[DISCORD]</span> Push notification sent — status 204.</span></div>
+      <div class="log-line"><span class="t">[09:42:17]</span><span><span class="tag">[WINDOWS]</span> Toast notification delivered.</span></div>
+      <div class="log-line"><span class="t">[09:47:53]</span><span>Person left frame — resuming monitoring.</span></div>
+      <div class="log-line alert"><span class="t">[10:03:41]</span><span><span class="tag">[ALERT]</span> 1 person detected — snapshot saved.</span></div>
+      <div class="log-line"><span class="t">[10:03:41]</span><span><span class="tag">[DISCORD]</span> Push notification sent — status 204.</span></div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="section-label">// 03 — BUILT WITH</div>
+    <h2 class="section-title display">No shortcuts on the stack.</h2>
+    <p class="section-desc">Computer vision, native OS integration, and a rendering pipeline built from scratch — packaged into a single standalone executable.</p>
+
+    <div class="stack-strip">
+      <div class="stack-pill">Python 3.14</div>
+      <div class="stack-pill">YOLOv8 / Ultralytics</div>
+      <div class="stack-pill">OpenCV</div>
+      <div class="stack-pill">Tkinter</div>
+      <div class="stack-pill">pystray</div>
+      <div class="stack-pill">winotify</div>
+      <div class="stack-pill">Discord Webhooks</div>
+      <div class="stack-pill">PyInstaller</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="cta-section" style="border-top:none;">
+    <div class="section-label" style="justify-content:center; display:flex;">// READY WHEN YOU ARE</div>
+    <h2 class="display">Deploy it on your own machine.</h2>
+    <p>Clone the repo, drop in your Discord webhook, and RoomGuard-X is watching within minutes.</p>
+    <div class="hero-actions" style="justify-content:center;">
+      <a class="btn-primary" href="https://github.com/YOUR-USERNAME/RoomGuard-X" target="_blank">VIEW ON GITHUB →</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; max-width:1100px;">
+    <span>ROOMGUARD-X — X SERIES / PROJECT 1</span>
+    <span>MADE BY MR REIX</span>
+  </div>
+</footer>
+
+<script>
+  // Live uptime counter
+  const start = Date.now();
+  function pad(n){return n.toString().padStart(2,'0');}
+  setInterval(() => {
+    const diff = Math.floor((Date.now() - start) / 1000);
+    const h = Math.floor(diff / 3600);
+    const m = Math.floor((diff % 3600) / 60);
+    const s = diff % 60;
+    document.getElementById('uptime').textContent = `${h}:${pad(m)}:${pad(s)}`;
+  }, 1000);
+
+  // Flicker FPS slightly for a "live" feel
+  setInterval(() => {
+    const fps = (24 + Math.random() * 6).toFixed(1);
+    document.getElementById('fps').textContent = fps;
+  }, 900);
+
+  // Live clock in footer bar
+  function updateClock(){
+    const now = new Date();
+    const days = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+    const day = days[now.getDay()];
+    const month = months[now.getMonth()];
+    let h = now.getHours();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; h = h ? h : 12;
+    const m = pad(now.getMinutes());
+    const s = pad(now.getSeconds());
+    document.getElementById('clock').textContent = `${day}, ${month} ${now.getDate()} ${now.getFullYear()} — ${pad(h)}:${m}:${s} ${ampm}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>

@@ -29,7 +29,8 @@ A real-time person detection and alert system built with Python, YOLOv8, and Ope
 
 ## 🖥️ Screenshots
 
-| Launcher : <img width="484" height="484" alt="Screenshot 2026-07-17 173624" src="https://github.com/user-attachments/assets/6a7ef582-453c-44a9-824d-9f5558ea7bf5" />
+| Launcher : 
+<img width="484" height="484" alt="Screenshot 2026-07-17 173624" src="https://github.com/user-attachments/assets/6a7ef582-453c-44a9-824d-9f5558ea7bf5" />
 
 | Detector HUD : <img width="1578" height="873" alt="Screenshot 2026-07-17 173736" src="https://github.com/user-attachments/assets/9f6ff8bb-28c6-439b-b1bf-6fcdbbaf8a62" />
 

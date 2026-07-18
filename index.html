@@ -261,6 +261,8 @@
       <a href="#install">Install</a>
       <a href="#stack">Stack</a>
       <a href="#alerts">Alerts</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#reviews">Reviews</a>
     </div>
     <a class="nav-cta" href="#cta">GET STARTED →</a>
   </div>
@@ -448,11 +450,71 @@
     </div>
   </section>
 
+  <!-- PRIVACY -->
+  <section id="privacy">
+    <div class="section-label">// 05 — DATA PRIVACY</div>
+    <h2 class="section-title display">Your data stays yours. Literally.</h2>
+    <p class="section-desc">No cloud backend. No central server. No account. Here's exactly where every piece of data goes.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-index mono">P1</div>
+        <h3>Detection runs 100% locally</h3>
+        <p>YOLOv8 processes your webcam feed entirely on your own machine. Nothing about your video feed is ever uploaded anywhere, by anyone, ever.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">P2</div>
+        <h3>Alerts go to YOUR server only</h3>
+        <p>Each install uses its own Discord webhook, configured by you in Settings and stored only in a local <span class="mono" style="color:var(--white);">config.json</span> on your PC. It is never hardcoded, never shared, and never sent to the developer.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">P3</div>
+        <h3>No webhook, no problem</h3>
+        <p>Discord alerts are entirely optional. Leave it unconfigured and RoomGuard-X still detects, records, and shows Windows notifications — just without the phone push.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">P4</div>
+        <h3>Snapshots stay on disk</h3>
+        <p>Captured photos and logs are saved to a local folder next to the app. They're only transmitted if — and only to where — you've configured your own webhook to send them.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">P5</div>
+        <h3>Open source, verifiable</h3>
+        <p>Every claim above is checkable in the source code on GitHub. Don't take our word for it — read it yourself.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-index mono">P6</div>
+        <h3>No telemetry, no analytics</h3>
+        <p>RoomGuard-X does not phone home, track usage, or collect any information about you or your device beyond what you explicitly configure.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="section-label">// 06 — RATE & REVIEW</div>
+    <h2 class="section-title display">Used it? Let people know.</h2>
+    <p class="section-desc">Rate your experience and leave a comment below — visible to everyone who visits this page. Comments are powered by GitHub Discussions, so you'll need a free GitHub account to post.</p>
+
+    <div class="log-block" style="max-width:100%; padding:36px;">
+      <div style="text-align:center; margin-bottom:8px;">
+        <div id="star-rating" style="font-size:44px; letter-spacing:6px; cursor:pointer; user-select:none;">
+          <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+        </div>
+        <div id="rating-label" style="font-family:'JetBrains Mono'; font-size:12px; color:var(--grey-dim); letter-spacing:2px; margin-top:8px;">TAP A STAR TO RATE — INCLUDE IT IN YOUR COMMENT BELOW</div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <div class="giscus"></div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section id="cta" class="cta-section" style="border-top:none;">
     <div class="section-label" style="justify-content:center; display:flex;">// READY WHEN YOU ARE</div>
     <h2 class="display">Deploy it on your own machine.</h2>
-    <p>Clone the repo, drop in your Discord webhook, and RoomGuard-X is watching within minutes.</p>
+    <p>Clone the repo, drop in your own Discord webhook, and RoomGuard-X is watching within minutes.</p>
     <div class="hero-actions" style="justify-content:center;">
       <a class="btn-primary" href="https://github.com/XAYRH/X-SERIES-PROJECTS" target="_blank">VIEW ON GITHUB →</a>
     </div>
@@ -501,6 +563,58 @@
   }
   updateClock();
   setInterval(updateClock, 1000);
+
+  // Star rating widget - visual selection, remembered per-browser via localStorage.
+  // Note: this does NOT sync across visitors on its own (a static site has no database) -
+  // the actual visible-to-everyone rating/review lives in the comment below via Giscus.
+  const stars = document.querySelectorAll('#star-rating .star');
+  const ratingLabel = document.getElementById('rating-label');
+  const savedRating = localStorage.getItem('roomguardx_rating');
+
+  function paintStars(value) {
+    stars.forEach(s => {
+      s.style.color = parseInt(s.dataset.value) <= value ? '#f2f2f0' : '#3a3a3d';
+    });
+  }
+  function setLabel(value) {
+    ratingLabel.textContent = value
+      ? `YOU RATED THIS ${value}/5 — MENTION IT IN YOUR COMMENT BELOW`
+      : 'TAP A STAR TO RATE — INCLUDE IT IN YOUR COMMENT BELOW';
+  }
+
+  paintStars(savedRating || 0);
+  setLabel(savedRating || 0);
+
+  stars.forEach(star => {
+    star.addEventListener('mouseenter', () => paintStars(star.dataset.value));
+    star.addEventListener('mouseleave', () => paintStars(localStorage.getItem('roomguardx_rating') || 0));
+    star.addEventListener('click', () => {
+      const value = star.dataset.value;
+      localStorage.setItem('roomguardx_rating', value);
+      paintStars(value);
+      setLabel(value);
+    });
+  });
+</script>
+
+<!-- Giscus comments - powered by GitHub Discussions on this repo.
+     Visible to every visitor, persists publicly, requires free GitHub login to post.
+     Setup: enable Discussions on the repo, register at https://giscus.app, then
+     replace data-repo-id and data-category-id below with your own values. -->
+<script src="https://giscus.app/client.js"
+        data-repo="XAYRH/X-SERIES-PROJECTS"
+        data-repo-id="REPLACE_WITH_YOUR_REPO_ID"
+        data-category="General"
+        data-category-id="REPLACE_WITH_YOUR_CATEGORY_ID"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="dark"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
 </script>
 
 </body>
